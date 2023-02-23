@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect , useState } from 'react'
 import './Sidebar.css'
 import { CgProfile } from 'react-icons/cg';
 import { MdDonutLarge,  } from 'react-icons/md';
@@ -7,30 +7,27 @@ import { FiMoreVertical } from 'react-icons/fi';
 import { MdGroups } from 'react-icons/md';
 import { HiOutlineSearch } from 'react-icons/hi';
 import Sidebarchat from './Sidebarchat';
-import db from './firebase'
+import db from "./firebase";
 
 function Sidebar() {
   const [rooms, setRooms] = useState([]);
   
   useEffect(() => {
-    // (async ()=> {
-    //   // try{
-    //   //   const rooms = await fetchRooms();
-    //   //   setRooms(rooms);
-    //   // } catch(err){
-    //   //   console.log('Error occured when fetching')
-    //   // }
-    // })();
-    db.collection('rooms').onSnapshot((snapshot) => 
-    setRooms(
-      snapshot.docs.map((doc) => ({
-        id:doc.id,
-        data:doc.data()
-      }))
-      )
-    );
-  },[]);
-
+  //   db.collection("rooms").get().then((snapshot) => 
+  //   setRooms(
+  //     snapshot.docs.map((doc) => ({
+  //       id:doc.id,
+  //       data:doc.data(),
+  //     }))
+  //     )
+  //   );
+  db.collection("data").get().then((querySnapshot) => {
+    querySnapshot.forEach(element => {
+        const data = element.data();
+        setRooms(arr => [...arr , data]); 
+      })
+    });
+},[]);
 
   return (
     <div className='sidebar'>
@@ -51,8 +48,8 @@ function Sidebar() {
         </div>   
         <div className='sidebar__chats'>
             <Sidebarchat />
-            {rooms.map(room =>(
-              <Sidebarchat key={room.id} id={room.id} name={room.data.name}/>
+            {rooms.map(data =>(
+              <Sidebarchat name={data.nane} age={data.age}/>
             ))}
         </div>   
     </div>
